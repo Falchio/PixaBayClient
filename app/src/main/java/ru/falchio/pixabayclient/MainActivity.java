@@ -7,8 +7,8 @@ import ru.falchio.pixabayclient.presenters.PresenterMain;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
-    private static final FragmentMain fragmentMain = new FragmentMain();
-    private static final PresenterMain presenterMain = new PresenterMain();
+    private static final FragmentMain FRAGMENT_MAIN = new FragmentMain();
+    private static final PresenterMain PRESENTER_MAIN = new PresenterMain();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fragmentMainAdd(){
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_main, fragmentMain);
-        fragmentTransaction.commit();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.fragment_main, FRAGMENT_MAIN);
+            fragmentTransaction.commit();
     }
 
 }

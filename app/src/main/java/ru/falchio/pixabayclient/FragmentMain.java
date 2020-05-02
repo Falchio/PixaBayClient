@@ -20,7 +20,7 @@ import ru.falchio.pixabayclient.data.PixaImage;
 
 
 public class FragmentMain extends Fragment {
-    private List<PixaImage> pixaImages = new ArrayList<>();
+
 
 
     @Nullable
@@ -29,6 +29,7 @@ public class FragmentMain extends Fragment {
         //в начале создаём view затем получаем ссылку на RecyclerView
         View view = inflater.inflate(R.layout.fragment_main,container,false);
 
+        List<PixaImage> pixaImages = new ArrayList<>();
         pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
         pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
         pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
