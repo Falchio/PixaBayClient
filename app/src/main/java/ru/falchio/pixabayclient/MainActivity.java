@@ -1,51 +1,27 @@
 package ru.falchio.pixabayclient;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import ru.falchio.pixabayclient.data.DataAdapter;
-import ru.falchio.pixabayclient.data.PixaImage;
+import ru.falchio.pixabayclient.presenters.PresenterMain;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
-    private List<PixaImage> pixaImages = new ArrayList<>();
+    private static final FragmentMain fragmentMain = new FragmentMain();
+    private static final PresenterMain presenterMain = new PresenterMain();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
-        pixaImages.add(new PixaImage(R.drawable.ic_icon_svg));
+        fragmentMainAdd();
+    }
 
-        RecyclerView recyclerView = findViewById(R.id.list);
-        //грид менеджер для размещения RecyclerView в 2 столбца
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        // создаем адаптер
-        DataAdapter adapter = new DataAdapter(this, pixaImages);
-        // устанавливаем для списка адаптер
-        recyclerView.setAdapter(adapter);
-
+    private void fragmentMainAdd(){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_main, fragmentMain);
+        fragmentTransaction.commit();
     }
 
 }
