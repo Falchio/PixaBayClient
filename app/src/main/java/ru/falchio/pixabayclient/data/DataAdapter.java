@@ -14,15 +14,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import ru.falchio.pixabayclient.FragmentPixaImage;
 import ru.falchio.pixabayclient.R;
+import ru.falchio.pixabayclient.json.PixaImageUrl;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
     private LayoutInflater inflater;
-    private List<PixaImage> pixaImages;
+    private List<PixaImageUrl> pixaImages;
 
     // не забываем создавать свой ViewHolder!
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,7 +37,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         }
     }
 
-    public DataAdapter(Context context, List<PixaImage> pixaImages) {
+    public DataAdapter(Context context, List<PixaImageUrl> pixaImages) {
         this.inflater = LayoutInflater.from(context);
         this.pixaImages = pixaImages;
     }
@@ -48,15 +51,16 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull DataAdapter.ViewHolder holder, final int position) {
-        final PixaImage pixaImage = pixaImages.get(position);
-        holder.imageView.setImageResource(pixaImage.getImage());
+        final PixaImageUrl pixaImageUrl = pixaImages.get(position);
+
+        Picasso.get().load(pixaImageUrl.getPreviewUrl()).into(holder.imageView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick:  <-view clicked-> " + position);
 
-                FragmentPixaImage fragmentPixaImage = new FragmentPixaImage(pixaImage.getImage());
+                FragmentPixaImage fragmentPixaImage = new FragmentPixaImage(pixaImageUrl.getWebFormatUrl());
                 FragmentManager fragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 int frame = ((AppCompatActivity) v.getContext()).findViewById(R.id.main_fragment_container).getId();

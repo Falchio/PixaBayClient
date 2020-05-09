@@ -10,13 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.Objects;
 
 
 public class FragmentPixaImage extends Fragment {
-    private int image;
+    private String image;
 
-    public FragmentPixaImage(int image) {
+    public FragmentPixaImage(String image) {
         this.image = image;
     }
 
@@ -30,7 +32,9 @@ public class FragmentPixaImage extends Fragment {
         //в начале создаём view затем получаем ссылку на RecyclerView
         View view = inflater.inflate(R.layout.fragment_pixa_image, container, false);
         ImageView imageView = Objects.requireNonNull(view).findViewById(R.id.frag_pixa_image_view);
-        imageView.setImageResource(this.image);
+
+        Picasso.get().load(this.image).into(imageView);
+
         return view;
     }
 }

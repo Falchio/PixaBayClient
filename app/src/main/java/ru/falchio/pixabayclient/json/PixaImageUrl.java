@@ -28,7 +28,7 @@ public class PixaImageUrl {
         this.webFormatUrl = webFormatUrl;
     }
 
-   
+
     @NonNull
     @Override
     public String toString() {
