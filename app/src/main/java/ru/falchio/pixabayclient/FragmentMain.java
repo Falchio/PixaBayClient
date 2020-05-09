@@ -1,11 +1,14 @@
 package ru.falchio.pixabayclient;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +24,12 @@ import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.presenters.PresenterFragmentMain;
 
 
-
 public class FragmentMain extends Fragment {
     private PresenterFragmentMain presenterFragMain;
     private RecyclerView recyclerView;
     private Button load;
+    private Spinner spinner;
+    private String imageType="all";
 
 
     @Nullable
@@ -40,7 +44,6 @@ public class FragmentMain extends Fragment {
         //ссылку на RecyclerView получаем из view, созданной ранее
         recyclerView = Objects.requireNonNull(view).findViewById(R.id.list);
         load = Objects.requireNonNull(view).findViewById(R.id.load_pixa_image);
-
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,13 +51,16 @@ public class FragmentMain extends Fragment {
             }
         });
 
+        spinner = Objects.requireNonNull(view).findViewById(R.id.image_types);
+        initSpinner(spinner);
+
         return view;
     }
 
-    private void loadRecyclerView(){
+    private void loadRecyclerView() {
         List<PixaImageUrl> pixaImages = presenterFragMain.getModel().getPixaImages();
 
-        if (pixaImages!=null){
+        if (pixaImages != null) {
             //грид менеджер для размещения RecyclerView в 2 столбца
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
@@ -65,6 +71,31 @@ public class FragmentMain extends Fragment {
             recyclerView.setAdapter(adapter);
         }
 
+    }
+
+    private void initSpinner(Spinner spinner) {
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(
+                        Objects.requireNonNull(getContext()),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        Objects.requireNonNull(getActivity()).getResources().getStringArray(R.array.image_types)
+                );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setPrompt(getString(R.string.image_type));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                imageType = (String) parent.getItemAtPosition(position);
+                Toast.makeText(getContext(), imageType, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public PresenterFragmentMain getPresenterFragMain() {

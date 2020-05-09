@@ -25,6 +25,8 @@ public class Model {
     private final String IMAGE_TYPE = "photo";
 
 
+
+
     public Model() {
         initRetrofit();
     }
@@ -55,6 +57,5 @@ public class Model {
                 Log.d(TAG, "onFailure: " + t.toString());
             }
         });
-
     }
 }

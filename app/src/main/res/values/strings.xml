@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PixaBayClient</string>
+    <string name="search">Search</string>
+    <string name="image_type">image type</string>
 </resources>
