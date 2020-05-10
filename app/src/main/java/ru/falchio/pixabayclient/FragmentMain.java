@@ -1,6 +1,7 @@
 package ru.falchio.pixabayclient;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,24 +21,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import ru.falchio.pixabayclient.data.DataAdapter;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.presenters.PresenterFragmentMain;
 
 
 public class FragmentMain extends Fragment {
+    private final String TAG = this.getClass().getSimpleName();
     private PresenterFragmentMain presenterFragMain;
     private RecyclerView recyclerView;
     private Button load;
     private Spinner spinner;
     private String imageType;
     private EditText editText;
+    private Observable<List<PixaImageUrl>> observable = Observable.empty(); // наблюдаемый объект
+    private Disposable disposable; // наблюдатель
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         presenterFragMain = new PresenterFragmentMain();
 
         //в начале создаём view затем получаем ссылку на RecyclerView
@@ -49,37 +55,41 @@ public class FragmentMain extends Fragment {
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadRecyclerView();
+                loadUrlImageRx();
             }
         });
         editText =Objects.requireNonNull(view).findViewById(R.id.search_text);
         spinner = Objects.requireNonNull(view).findViewById(R.id.image_types);
         initSpinner(spinner);
 
-        return view;
+
+
+       return view;
     }
 
-    private void loadRecyclerView() {
+    private void loadUrlImageRx(){
         String searchWord = editText.getText().toString();
         if (searchWord.isEmpty()||searchWord.equals(" ")){
             Toast.makeText(getContext(), getString(R.string.please_enter_word),Toast.LENGTH_SHORT).show();
             return;
         }
 
-        List<PixaImageUrl> pixaImages = presenterFragMain.getPixaImageUrl(searchWord, imageType);
-
-        if (pixaImages != null) {
-            //грид менеджер для размещения RecyclerView в 2 столбца
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
-            // создаем адаптер
-            DataAdapter adapter = new DataAdapter(getContext(), pixaImages);
-
-            // устанавливаем для списка адаптер
-            recyclerView.setAdapter(adapter);
-        }
-
+        observable = presenterFragMain.getPixaImageUrlRX(searchWord, imageType);
+        disposable = observable.observeOn(AndroidSchedulers.mainThread()).retry().subscribe(
+                this::loadRecyclerViewRx, //pixaImageUrls -> loadRecyclerViewRx(pixaImageUrls), на самом деле тут написано это
+                throwable -> Log.d(TAG, "onError: " + throwable.toString())
+        );
     }
+
+    private void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList){
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        // создаем адаптер
+        DataAdapter adapter = new DataAdapter(getContext(), pixaImageUrlList);
+        // устанавливаем для списка адаптер
+        recyclerView.setAdapter(adapter);
+    }
+
+
 
     private void initSpinner(Spinner spinner) {
         ArrayAdapter<String> adapter =
@@ -106,11 +116,10 @@ public class FragmentMain extends Fragment {
         });
     }
 
-    public PresenterFragmentMain getPresenterFragMain() {
-        return presenterFragMain;
-    }
 
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
+    @Override
+    public void onStop() {
+        super.onStop();
+        disposable.dispose();
     }
 }

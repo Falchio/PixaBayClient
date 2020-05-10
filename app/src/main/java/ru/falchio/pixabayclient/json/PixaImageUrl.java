@@ -28,6 +28,10 @@ public class PixaImageUrl {
         this.webFormatUrl = webFormatUrl;
     }
 
+    public PixaImageUrl(String previewUrl, String webFormatUrl) {
+        this.previewUrl = previewUrl;
+        this.webFormatUrl = webFormatUrl;
+    }
 
     @NonNull
     @Override
