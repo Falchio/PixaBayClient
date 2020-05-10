@@ -2,4 +2,6 @@
     <string name="app_name">PixaBayClient</string>
     <string name="search">Search</string>
     <string name="image_type">image type</string>
+    <string name="enter_key_word">enter key word</string>
+    <string name="please_enter_word">Please, enter a search term</string>
 </resources>

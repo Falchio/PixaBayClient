@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,7 +30,8 @@ public class FragmentMain extends Fragment {
     private RecyclerView recyclerView;
     private Button load;
     private Spinner spinner;
-    private String imageType="all";
+    private String imageType;
+    private EditText editText;
 
 
     @Nullable
@@ -50,7 +52,7 @@ public class FragmentMain extends Fragment {
                 loadRecyclerView();
             }
         });
-
+        editText =Objects.requireNonNull(view).findViewById(R.id.search_text);
         spinner = Objects.requireNonNull(view).findViewById(R.id.image_types);
         initSpinner(spinner);
 
@@ -58,7 +60,13 @@ public class FragmentMain extends Fragment {
     }
 
     private void loadRecyclerView() {
-        List<PixaImageUrl> pixaImages = presenterFragMain.getModel().getPixaImages();
+        String searchWord = editText.getText().toString();
+        if (searchWord.isEmpty()||searchWord.equals(" ")){
+            Toast.makeText(getContext(), getString(R.string.please_enter_word),Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<PixaImageUrl> pixaImages = presenterFragMain.getPixaImageUrl(searchWord, imageType);
 
         if (pixaImages != null) {
             //грид менеджер для размещения RecyclerView в 2 столбца
@@ -93,7 +101,7 @@ public class FragmentMain extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                imageType=(String) parent.getItemAtPosition(0);
             }
         });
     }

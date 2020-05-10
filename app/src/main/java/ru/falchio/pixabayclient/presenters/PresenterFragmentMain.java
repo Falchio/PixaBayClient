@@ -1,5 +1,8 @@
 package ru.falchio.pixabayclient.presenters;
 
+import java.util.List;
+
+import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.model.Model;
 
 public class PresenterFragmentMain {
@@ -9,7 +12,9 @@ public class PresenterFragmentMain {
         this.model = new Model();
     }
 
-    public Model getModel() {
-        return model;
+    public List<PixaImageUrl> getPixaImageUrl(String wordsForSearch, String imageType){
+        return model.getPixaImages(wordsForSearch,imageType);
+
     }
+
 }

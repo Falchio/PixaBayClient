@@ -6,13 +6,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
-
-import ru.falchio.pixabayclient.presenters.PresenterMain;
-
 public class MainActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private static FragmentMain FRAGMENT_MAIN = new FragmentMain();
-    private static final PresenterMain PRESENTER_MAIN = new PresenterMain();
     private FragmentTransaction fragmentTransaction;
 
     @Override
