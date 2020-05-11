@@ -97,7 +97,6 @@ public class FragmentMain extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 imageType = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getContext(), imageType, Toast.LENGTH_SHORT).show();
             }
 
             @Override

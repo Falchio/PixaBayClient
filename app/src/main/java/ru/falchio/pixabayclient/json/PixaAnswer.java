@@ -17,15 +17,4 @@ public class PixaAnswer {
         this.pixaImageUrls = pixaImageUrls;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        StringBuilder toString = new StringBuilder();
-
-        for (PixaImageUrl pixaImageUrl :this.pixaImageUrls) {
-            toString.append(pixaImageUrl.toString());
-        }
-
-        return String.valueOf(toString);
-    }
 }

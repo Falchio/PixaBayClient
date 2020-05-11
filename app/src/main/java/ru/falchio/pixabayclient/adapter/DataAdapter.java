@@ -56,8 +56,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         Picasso.get().load(pixaImageUrl.getPreviewUrl()).into(holder.imageView);
 
         holder.itemView.setOnClickListener(v -> {
-            Log.d(TAG, "onClick:  <-view clicked-> " + position);
-
             FragmentPixaImage fragmentPixaImage = new FragmentPixaImage(pixaImageUrl.getWebFormatUrl());
             FragmentManager fragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
