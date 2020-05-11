@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,15 +38,12 @@ public class FragmentMain extends Fragment {
     private Spinner spinner;
     private String imageType;
     private EditText editText;
-    private Observable<List<PixaImageUrl>> observable = Observable.empty(); // наблюдаемый объект
-    private Disposable disposable; // наблюдатель
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenterFragMain = new PresenterFragmentMain();
-
         //в начале создаём view затем получаем ссылку на RecyclerView
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -61,10 +59,18 @@ public class FragmentMain extends Fragment {
         editText =Objects.requireNonNull(view).findViewById(R.id.search_text);
         spinner = Objects.requireNonNull(view).findViewById(R.id.image_types);
         initSpinner(spinner);
+      return view;
+    }
 
-
-
-       return view;
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenterFragMain.getListMutableLiveData().observe(this, new Observer<List<PixaImageUrl>>() {
+            @Override
+            public void onChanged(List<PixaImageUrl> pixaImageUrlList) {
+                loadRecyclerViewRx(pixaImageUrlList);
+            }
+        });
     }
 
     private void loadUrlImageRx(){
@@ -74,11 +80,7 @@ public class FragmentMain extends Fragment {
             return;
         }
 
-        observable = presenterFragMain.getPixaImageUrlRX(searchWord, imageType);
-        disposable = observable.observeOn(AndroidSchedulers.mainThread()).retry().subscribe(
-                this::loadRecyclerViewRx, //pixaImageUrls -> loadRecyclerViewRx(pixaImageUrls), на самом деле тут написано это
-                throwable -> Log.d(TAG, "onError: " + throwable.toString())
-        );
+        presenterFragMain.getPixaImageUrlRX(searchWord, imageType);
     }
 
     private void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList){
@@ -116,10 +118,4 @@ public class FragmentMain extends Fragment {
         });
     }
 
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        disposable.dispose();
-    }
 }

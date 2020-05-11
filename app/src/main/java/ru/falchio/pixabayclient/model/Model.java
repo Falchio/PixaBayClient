@@ -2,6 +2,9 @@ package ru.falchio.pixabayclient.model;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,8 +17,9 @@ import ru.falchio.pixabayclient.json.PixaAnswer;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.json.PixaRequest;
 
-public class Model {
-    private List<PixaImageUrl> pixaImages;
+public class Model extends ViewModel {
+    private MutableLiveData<List<PixaImageUrl>> listMutableLiveData;
+//    private List<PixaImageUrl> pixaImages;
     private final String TAG = this.getClass().getSimpleName();
     private PixaRequest request;
     private PixaAnswer pixaAnswer;
@@ -28,14 +32,13 @@ public class Model {
     }
 
     public void getPixaImages(String wordsForSearch, String imageType) {
-
         wordsForSearch.replaceAll(" ","+");
         request.loadImage(API, wordsForSearch, imageType, "200").enqueue(new Callback<PixaAnswer>() {
             @Override
             public void onResponse(Call<PixaAnswer> call, Response<PixaAnswer> response) {
                 pixaAnswer = response.body();
-                pixaImages = Arrays.asList(pixaAnswer.getPixaImageUrls());
-
+                assert pixaAnswer != null;
+                listMutableLiveData.setValue(Arrays.asList(pixaAnswer.getPixaImageUrls()));
 //                Log.d(TAG, "onResponse: " + pixaAnswer.toString());
             }
 
@@ -46,9 +49,9 @@ public class Model {
         });
     }
 
-    public List<PixaImageUrl> getPixaImages() {
-        return pixaImages;
-    }
+//    public List<PixaImageUrl> getPixaImages() {
+//        return pixaImages;
+//    }
 
     private void initRetrofit() {
 
@@ -57,5 +60,12 @@ public class Model {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         request = retrofit.create(PixaRequest.class);
+    }
+
+    public MutableLiveData<List<PixaImageUrl>> getListMutableLiveData() {
+        if (listMutableLiveData==null) {
+            listMutableLiveData = new MutableLiveData<>();            // weatherMutableLiveData не присвоено значение!
+        }
+        return listMutableLiveData;
     }
 }

@@ -3,9 +3,7 @@ package ru.falchio.pixabayclient.presenters;
 
 import android.util.Log;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.schedulers.Schedulers;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
@@ -26,16 +24,26 @@ public class PresenterFragmentMain {
 //
 //    }
 
-    public Observable<List<PixaImageUrl>> getPixaImageUrlRX(String searchWord, String imageType) {
+//    public Observable<List<PixaImageUrl>> getPixaImageUrlRX(String searchWord, String imageType) {
+//        model.getPixaImages(searchWord, imageType);
+//        Observable<List<PixaImageUrl>> observable = Observable.create((ObservableOnSubscribe<List<PixaImageUrl>>) emitter -> {
+//            try {
+//                emitter.onNext(model.getPixaImages());
+//                emitter.onComplete();
+//            } catch (Exception e) {
+//                Log.e(TAG, "getPixaImageUrlRX: " + e.toString());
+//            }
+//        }).subscribeOn(Schedulers.io());
+//        return observable;
+//    }
+
+    public void getPixaImageUrlRX(String searchWord, String imageType){
         model.getPixaImages(searchWord, imageType);
-        Observable<List<PixaImageUrl>> observable = Observable.create((ObservableOnSubscribe<List<PixaImageUrl>>) emitter -> {
-            try {
-                emitter.onNext(model.getPixaImages());
-                emitter.onComplete();
-            } catch (Exception e) {
-                Log.e(TAG, "getPixaImageUrlRX: " + e.toString());
-            }
-        }).subscribeOn(Schedulers.io());
-        return observable;
+    }
+
+
+
+    public MutableLiveData<List<PixaImageUrl>> getListMutableLiveData() {
+        return model.getListMutableLiveData();
     }
 }
