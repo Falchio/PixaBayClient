@@ -12,6 +12,7 @@ public class PixaAnswer {
         return pixaImageUrls;
     }
 
+    @SuppressWarnings("unused")
     public void setPixaImageUrls(PixaImageUrl[] pixaImageUrls) {
         this.pixaImageUrls = pixaImageUrls;
     }

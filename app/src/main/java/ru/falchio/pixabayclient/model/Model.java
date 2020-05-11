@@ -23,6 +23,7 @@ public class Model extends ViewModel {
     private final String TAG = this.getClass().getSimpleName();
     private PixaRequest request;
     private PixaAnswer pixaAnswer;
+    @SuppressWarnings("SpellCheckingInspection")
     private final String API = "16246042-74f45b97e0abdd7225fc1506d";
     private Retrofit retrofit;
 

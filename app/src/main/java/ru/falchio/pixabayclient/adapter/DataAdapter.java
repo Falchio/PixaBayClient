@@ -1,4 +1,4 @@
-package ru.falchio.pixabayclient.data;
+package ru.falchio.pixabayclient.adapter;
 
 
 import android.content.Context;
@@ -55,22 +55,19 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
         Picasso.get().load(pixaImageUrl.getPreviewUrl()).into(holder.imageView);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick:  <-view clicked-> " + position);
+        holder.itemView.setOnClickListener(v -> {
+            Log.d(TAG, "onClick:  <-view clicked-> " + position);
 
-                FragmentPixaImage fragmentPixaImage = new FragmentPixaImage(pixaImageUrl.getWebFormatUrl());
-                FragmentManager fragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                int frame = ((AppCompatActivity) v.getContext()).findViewById(R.id.main_fragment_container).getId();
-                transaction.replace(
-                        frame,
-                        fragmentPixaImage);
-                transaction.addToBackStack("");
+            FragmentPixaImage fragmentPixaImage = new FragmentPixaImage(pixaImageUrl.getWebFormatUrl());
+            FragmentManager fragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            int frame = ((AppCompatActivity) v.getContext()).findViewById(R.id.main_fragment_container).getId();
+            transaction.replace(
+                    frame,
+                    fragmentPixaImage);
+            transaction.addToBackStack("");
 
-                transaction.commit();
-            }
+            transaction.commit();
         });
     }
 

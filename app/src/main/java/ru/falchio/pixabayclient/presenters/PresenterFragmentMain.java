@@ -1,8 +1,6 @@
 package ru.falchio.pixabayclient.presenters;
 
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;

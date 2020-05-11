@@ -1,7 +1,6 @@
 package ru.falchio.pixabayclient;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import ru.falchio.pixabayclient.data.DataAdapter;
+import ru.falchio.pixabayclient.adapter.DataAdapter;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.presenters.PresenterFragmentMain;
 
@@ -50,12 +45,7 @@ public class FragmentMain extends Fragment {
         //ссылку на RecyclerView получаем из view, созданной ранее
         recyclerView = Objects.requireNonNull(view).findViewById(R.id.list);
         load = Objects.requireNonNull(view).findViewById(R.id.load_pixa_image);
-        load.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadUrlImageRx();
-            }
-        });
+        load.setOnClickListener(v -> loadUrlImage());
         editText =Objects.requireNonNull(view).findViewById(R.id.search_text);
         spinner = Objects.requireNonNull(view).findViewById(R.id.image_types);
         initSpinner(spinner);
@@ -65,22 +55,21 @@ public class FragmentMain extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        presenterFragMain.getListMutableLiveData().observe(this, new Observer<List<PixaImageUrl>>() {
-            @Override
-            public void onChanged(List<PixaImageUrl> pixaImageUrlList) {
-                loadRecyclerViewRx(pixaImageUrlList);
-            }
-        });
+        // создаем наблюдателя за списком ссылок
+        if(presenterFragMain.getListMutableLiveData()!=null){
+            presenterFragMain.getListMutableLiveData().observe(this, pixaImageUrlList -> loadRecyclerViewRx(pixaImageUrlList));
+        }
+
     }
 
-    private void loadUrlImageRx(){
+    private void loadUrlImage(){
         String searchWord = editText.getText().toString();
         if (searchWord.isEmpty()||searchWord.equals(" ")){
             Toast.makeText(getContext(), getString(R.string.please_enter_word),Toast.LENGTH_SHORT).show();
             return;
         }
-
         presenterFragMain.getPixaImageUrlRX(searchWord, imageType);
+
     }
 
     private void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList){
@@ -95,7 +84,7 @@ public class FragmentMain extends Fragment {
 
     private void initSpinner(Spinner spinner) {
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(
+                new ArrayAdapter<>(
                         Objects.requireNonNull(getContext()),
                         android.R.layout.simple_spinner_dropdown_item,
                         Objects.requireNonNull(getActivity()).getResources().getStringArray(R.array.image_types)
