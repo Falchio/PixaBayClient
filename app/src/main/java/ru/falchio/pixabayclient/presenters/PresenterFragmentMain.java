@@ -21,15 +21,16 @@ public class PresenterFragmentMain {
         this.model = new Model();
     }
 
-    public List<PixaImageUrl> getPixaImageUrl(String wordsForSearch, String imageType) {
-        return model.getPixaImages(wordsForSearch, imageType);
-
-    }
+//    public List<PixaImageUrl> getPixaImageUrl(String wordsForSearch, String imageType) {
+//        return model.getPixaImages(wordsForSearch, imageType);
+//
+//    }
 
     public Observable<List<PixaImageUrl>> getPixaImageUrlRX(String searchWord, String imageType) {
+        model.getPixaImages(searchWord, imageType);
         Observable<List<PixaImageUrl>> observable = Observable.create((ObservableOnSubscribe<List<PixaImageUrl>>) emitter -> {
             try {
-                emitter.onNext(model.getPixaImages(searchWord, imageType));
+                emitter.onNext(model.getPixaImages());
                 emitter.onComplete();
             } catch (Exception e) {
                 Log.e(TAG, "getPixaImageUrlRX: " + e.toString());

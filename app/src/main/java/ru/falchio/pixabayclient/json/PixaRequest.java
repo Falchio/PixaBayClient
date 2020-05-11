@@ -6,5 +6,5 @@ import retrofit2.http.Query;
 
 public interface PixaRequest {
     @GET("api")
-    Call<PixaAnswer> loadImage(@Query("key") String apiKey, @Query("q") String searchKeyWord, @Query("image_type") String imageType);
+    Call<PixaAnswer> loadImage(@Query("key") String apiKey, @Query("q") String searchKeyWord, @Query("image_type") String imageType, @Query("per_page") String amountResults);
 }

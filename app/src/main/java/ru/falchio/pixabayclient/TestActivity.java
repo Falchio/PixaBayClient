@@ -34,7 +34,7 @@ public class TestActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request.loadImage(API,SEARCH_KEY_WORDS, IMAGE_TYPE).enqueue(new Callback<PixaAnswer>() {
+                request.loadImage(API,SEARCH_KEY_WORDS, IMAGE_TYPE,"200").enqueue(new Callback<PixaAnswer>() {
                     @Override
                     public void onResponse(Call<PixaAnswer> call, Response<PixaAnswer> response) {
                         PixaAnswer pixaAnswer = response.body();

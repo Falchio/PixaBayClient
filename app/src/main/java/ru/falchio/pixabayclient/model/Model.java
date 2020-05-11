@@ -27,9 +27,10 @@ public class Model {
         initRetrofit();
     }
 
-    public List<PixaImageUrl> getPixaImages(String wordsForSearch, String imageType) {
+    public void getPixaImages(String wordsForSearch, String imageType) {
+
         wordsForSearch.replaceAll(" ","+");
-        request.loadImage(API, wordsForSearch, imageType).enqueue(new Callback<PixaAnswer>() {
+        request.loadImage(API, wordsForSearch, imageType, "200").enqueue(new Callback<PixaAnswer>() {
             @Override
             public void onResponse(Call<PixaAnswer> call, Response<PixaAnswer> response) {
                 pixaAnswer = response.body();
@@ -43,6 +44,9 @@ public class Model {
                 Log.d(TAG, "onFailure: " + t.toString());
             }
         });
+    }
+
+    public List<PixaImageUrl> getPixaImages() {
         return pixaImages;
     }
 
