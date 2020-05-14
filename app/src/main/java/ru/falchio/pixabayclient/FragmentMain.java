@@ -20,14 +20,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Objects;
 
+import moxy.MvpAppCompatFragment;
+import moxy.presenter.InjectPresenter;
 import ru.falchio.pixabayclient.adapter.DataAdapter;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.presenters.PresenterFragmentMain;
 
 
-public class FragmentMain extends Fragment {
+public class FragmentMain extends MvpAppCompatFragment implements MainFragmentInterface {
     private final String TAG = this.getClass().getSimpleName();
-    private PresenterFragmentMain presenterFragMain;
+
+    @InjectPresenter
+    PresenterFragmentMain presenterFragMain;
+
     private RecyclerView recyclerView;
     private Button load;
     private Spinner spinner;
@@ -38,7 +43,7 @@ public class FragmentMain extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        presenterFragMain = new PresenterFragmentMain();
+//        presenterFragMain = new PresenterFragmentMain();  под Moxy пока выключу
         //в начале создаём view затем получаем ссылку на RecyclerView
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -60,6 +65,10 @@ public class FragmentMain extends Fragment {
             presenterFragMain.getListMutableLiveData().observe(this, pixaImageUrlList -> loadRecyclerViewRx(pixaImageUrlList));
         }
 
+        if (presenterFragMain.getListMutableLiveData().getValue()!=null){
+            loadRecyclerViewRx(presenterFragMain.getListMutableLiveData().getValue());
+        }
+
     }
 
     private void loadUrlImage(){
@@ -72,7 +81,7 @@ public class FragmentMain extends Fragment {
 
     }
 
-    private void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList){
+    public void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList){
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         // создаем адаптер
         DataAdapter adapter = new DataAdapter(getContext(), pixaImageUrlList);

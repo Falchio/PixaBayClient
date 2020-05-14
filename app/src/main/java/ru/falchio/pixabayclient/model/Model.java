@@ -47,9 +47,9 @@ public class Model extends ViewModel {
             } else{
                 pixaImages = App.getInstance().getPixaUrlsDao().getListPixaImageUrs(wordsForSearch, imageType);
             }
-
                 Log.d(TAG, "in new Thread: " + pixaImages.size() + " " + Thread.currentThread().getName());
-            if (pixaImages.size()<5){
+
+            if (pixaImages.size()<20){
                 Log.d(TAG, "getPixaImages: pixaImages from database < 5 items, then load link from pixabay");
                 getLinkImageFromPixabay(wordsForSearch, imageType);
             } else{

@@ -15,6 +15,8 @@ public class App extends Application {
     private PixaUrlsDatabase database;
     private Model model = new Model();
 
+
+
     public static App getInstance() {
         return instance;
     }
@@ -32,5 +34,9 @@ public class App extends Application {
                 PixaUrlsDatabase.class,
                 NAME_DATABASE
         ).build();
+    }
+
+    public Model getModel() {
+        return model;
     }
 }
