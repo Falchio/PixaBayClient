@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Observable;
+
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,14 +18,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.falchio.pixabayclient.App;
-import ru.falchio.pixabayclient.database.PixaUrlsDao;
 import ru.falchio.pixabayclient.json.PixaAnswer;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.json.PixaRequest;
 
 public class Model extends ViewModel {
     private MutableLiveData<List<PixaImageUrl>> listMutableLiveData;
-//    private List<PixaImageUrl> pixaImages;
+    private List<PixaImageUrl> pixaImages;
     private final String TAG = this.getClass().getSimpleName();
     private final String AMOUNT_RESULTS = "200";
     private PixaRequest request;
@@ -39,28 +39,46 @@ public class Model extends ViewModel {
     }
 
     public void getPixaImages(String wordsForSearch, String imageType) {
-        wordsForSearch.replaceAll(" ","+");
+        wordsForSearch.replaceAll(" ", "+");
+
+        Thread t1 = new Thread(() -> {
+            if (imageType.equals("all")){
+                pixaImages = App.getInstance().getPixaUrlsDao().getListPixaImageUrs(wordsForSearch);
+            } else{
+                pixaImages = App.getInstance().getPixaUrlsDao().getListPixaImageUrs(wordsForSearch, imageType);
+            }
+
+                Log.d(TAG, "in new Thread: " + pixaImages.size() + " " + Thread.currentThread().getName());
+            if (pixaImages.size()<5){
+                Log.d(TAG, "getPixaImages: pixaImages from database < 5 items, then load link from pixabay");
+                getLinkImageFromPixabay(wordsForSearch, imageType);
+            } else{
+                Log.d(TAG, "getPixaImages: pixaImages from database > 5 items, then get link from database");
+                listMutableLiveData.postValue(pixaImages);
+            }
+        });
+        t1.start();
+    }
+
+    private void getLinkImageFromPixabay(String wordsForSearch, String imageType) {
         request.loadImage(API, wordsForSearch, imageType, AMOUNT_RESULTS).enqueue(new Callback<PixaAnswer>() {
             @Override
             public void onResponse(Call<PixaAnswer> call, Response<PixaAnswer> response) {
                 pixaAnswer = response.body();
-                assert pixaAnswer != null;
-                listMutableLiveData.setValue(Arrays.asList(pixaAnswer.getPixaImageUrls()));
 
-                Thread thread = new Thread(){
-                    @Override
-                    public void run() {
-                        PixaUrlsDao dao = App.getInstance().getPixaUrlsDao();
-                        int i = 0;
-                        for (PixaImageUrl pixa:pixaAnswer.getPixaImageUrls()) {
-                            pixa.setWordsForSearch(wordsForSearch);
-                            dao.insertPixaImageUrl(pixa);
-                            Log.d(TAG, "onResponse: " + pixa.getWordsForSearch() + " " + i);
-                            i++;
-                        }
-                    }
-                };
-                thread.start();
+                assert pixaAnswer != null;
+                pixaImages = Arrays.asList(pixaAnswer.getPixaImageUrls());
+                for (PixaImageUrl pixa:pixaImages) {
+                    pixa.setWordsForSearch(wordsForSearch);
+                }
+                listMutableLiveData.setValue(pixaImages);
+
+                Observable<List<PixaImageUrl>> observable
+                        = Observable.just(Objects.requireNonNull(listMutableLiveData.getValue()));
+                observable.subscribeOn(Schedulers.io())
+                        .subscribe(pixaImageUrlList ->
+                                App.getInstance().getPixaUrlsDao().insertPixaImageUrlsList(pixaImageUrlList));
+
             }
 
             @Override
@@ -80,7 +98,7 @@ public class Model extends ViewModel {
     }
 
     public MutableLiveData<List<PixaImageUrl>> getListMutableLiveData() {
-        if (listMutableLiveData==null) {
+        if (listMutableLiveData == null) {
             listMutableLiveData = new MutableLiveData<>();
         }
         return listMutableLiveData;

@@ -29,11 +29,17 @@ public interface PixaUrlsDao {
     @Query("SELECT * FROM PixaUrls WHERE wordsForSearch=:wordsForSearch")
     List<PixaImageUrl> getListPixaImageUrs(String wordsForSearch);
 
+    @Query("SELECT * FROM PixaUrls WHERE wordsForSearch=:wordsForSearch AND imageType =:imageType")
+    List<PixaImageUrl> getListPixaImageUrs(String wordsForSearch, String imageType);
+
     @Query("SELECT COUNT() FROM PixaUrls")
     long getCountPixaImageUrls();
 
     @Query("DELETE FROM PixaUrls")
     void deletePixaImageUrls();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void  insertPixaImageUrlsList(List<PixaImageUrl> pixaImageUrlList);
 
 
 }
