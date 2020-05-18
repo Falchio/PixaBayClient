@@ -9,6 +9,9 @@ import androidx.room.Update;
 
 import java.util.List;
 
+
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 
 @Dao
@@ -27,10 +30,10 @@ public interface PixaUrlsDao {
     void deletePixaImageUrlsById(long wordsForSearch);
 
     @Query("SELECT * FROM PixaUrls WHERE wordsForSearch=:wordsForSearch")
-    List<PixaImageUrl> getListPixaImageUrs(String wordsForSearch);
+    Single<List<PixaImageUrl>> getListPixaImageUrs(String wordsForSearch);
 
     @Query("SELECT * FROM PixaUrls WHERE wordsForSearch=:wordsForSearch AND imageType =:imageType")
-    List<PixaImageUrl> getListPixaImageUrs(String wordsForSearch, String imageType);
+    Single<List<PixaImageUrl>> getListPixaImageUrs(String wordsForSearch, String imageType);
 
     @Query("SELECT COUNT() FROM PixaUrls")
     long getCountPixaImageUrls();

@@ -57,19 +57,7 @@ public class FragmentMain extends MvpAppCompatFragment implements MainFragmentIn
       return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // создаем наблюдателя за списком ссылок
-        if(presenterFragMain.getListMutableLiveData()!=null){
-            presenterFragMain.getListMutableLiveData().observe(this, pixaImageUrlList -> loadRecyclerViewRx(pixaImageUrlList));
-        }
 
-        if (presenterFragMain.getListMutableLiveData().getValue()!=null){
-            loadRecyclerViewRx(presenterFragMain.getListMutableLiveData().getValue());
-        }
-
-    }
 
     private void loadUrlImage(){
         String searchWord = editText.getText().toString();
@@ -80,6 +68,7 @@ public class FragmentMain extends MvpAppCompatFragment implements MainFragmentIn
         presenterFragMain.getPixaImageUrlRX(searchWord, imageType);
 
     }
+
 
     public void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList){
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
