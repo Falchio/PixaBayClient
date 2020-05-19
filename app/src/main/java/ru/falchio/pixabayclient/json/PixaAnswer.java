@@ -9,10 +9,6 @@ public class PixaAnswer {
     @SerializedName("hits")
     private PixaImageUrl[] pixaImageUrls;
 
-    public PixaImageUrl[] getPixaImageUrls() {
-        return pixaImageUrls;
-    }
-
     @SuppressWarnings("unused")
     public void setPixaImageUrls(PixaImageUrl[] pixaImageUrls) {
         this.pixaImageUrls = pixaImageUrls;

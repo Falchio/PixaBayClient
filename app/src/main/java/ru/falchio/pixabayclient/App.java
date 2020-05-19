@@ -13,7 +13,7 @@ public class App extends Application {
     private final String NAME_DATABASE = "PixaUrls";
     private static App instance;
     private PixaUrlsDatabase database;
-    private Model model = new Model();
+    private final Model model = new Model();
 
 
 

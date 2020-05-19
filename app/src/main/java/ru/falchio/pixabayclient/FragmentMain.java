@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,8 +56,6 @@ public class FragmentMain extends MvpAppCompatFragment implements MainFragmentIn
       return view;
     }
 
-
-
     private void loadUrlImage(){
         String searchWord = editText.getText().toString();
         if (searchWord.isEmpty()||searchWord.equals(" ")){
@@ -68,6 +65,7 @@ public class FragmentMain extends MvpAppCompatFragment implements MainFragmentIn
         presenterFragMain.getPixaImageUrlRX(searchWord, imageType);
 
     }
+
 
 
     public void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList){

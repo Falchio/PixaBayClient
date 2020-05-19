@@ -6,13 +6,9 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
-import io.reactivex.Observable;
-
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
@@ -27,11 +23,9 @@ import ru.falchio.pixabayclient.json.PixaRequest;
 
 public class Model extends ViewModel {
     private PixaUrlsDao pixaUrlsDao;
-    private List<PixaImageUrl> pixaImages;
     private final String TAG = this.getClass().getSimpleName();
 
     private PixaRequest request;
-    private PixaAnswer pixaAnswer;
     @SuppressWarnings("SpellCheckingInspection")
     private final String API_KEY = "16246042-74f45b97e0abdd7225fc1506d";
     private final String AMOUNT_RESULTS = "200";
@@ -68,13 +62,12 @@ public class Model extends ViewModel {
             pixaList = pixaUrlsDao.getListPixaImageUrs(wordsForSearch,imageType).subscribeOn(Schedulers.io());
         }
 
-        Single<List<PixaImageUrl>> pixa = pixaList.observeOn(Schedulers.io()).subscribeOn(Schedulers.io()).flatMap(new Func());
-        return pixa;
+        return pixaList.observeOn(Schedulers.io()).subscribeOn(Schedulers.io()).flatMap(new GetFromPixabayIfNeed());
     }
 
 
 
-    private class Func implements Function<List<PixaImageUrl>, SingleSource<List<PixaImageUrl>>>{
+    private class GetFromPixabayIfNeed implements Function<List<PixaImageUrl>, SingleSource<List<PixaImageUrl>>>{
         @Override
         public SingleSource<List<PixaImageUrl>> apply(List<PixaImageUrl> pixaImageUrls) throws Exception {
             if (pixaImageUrls.size()<20){
@@ -82,13 +75,10 @@ public class Model extends ViewModel {
                 Single<List<PixaImageUrl>> observable = request.loadImage(API_KEY,wordsForSearch,imageType,AMOUNT_RESULTS)
                         .map(PixaAnswer::getPixaImageUrlsList)
                         .subscribeOn(Schedulers.io());
-                Disposable dis = observable.observeOn(Schedulers.io()).subscribe(new Consumer<List<PixaImageUrl>>() {
-                    @Override
-                    public void accept(List<PixaImageUrl> pixaImageUrls) throws Exception {
-                        for (PixaImageUrl pixa:pixaImageUrls) {
-                            pixa.setWordsForSearch(wordsForSearch);
-                            pixaUrlsDao.insertPixaImageUrlsList(pixaImageUrls);
-                        }
+                Disposable dis = observable.observeOn(Schedulers.io()).subscribe(pixaImageUrlList -> {
+                    for (PixaImageUrl pixa: pixaImageUrlList) {
+                        pixa.setWordsForSearch(wordsForSearch);
+                        pixaUrlsDao.insertPixaImageUrlsList(pixaImageUrlList);
                     }
                 });
 
