@@ -1,11 +1,7 @@
 package ru.falchio.pixabayclient.model;
 
 import android.util.Log;
-
-import androidx.lifecycle.ViewModel;
-
 import java.util.List;
-
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.disposables.Disposable;
@@ -21,7 +17,7 @@ import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.json.PixaRequest;
 
 
-public class Model extends ViewModel {
+public class Model {
     private PixaUrlsDao pixaUrlsDao;
     private final String TAG = this.getClass().getSimpleName();
 
@@ -51,20 +47,20 @@ public class Model extends ViewModel {
     }
 
 
-    public Single<List<PixaImageUrl>> getImageLink2(String wordsForSearch, String imageType){
+    public Single<List<PixaImageUrl>> getImageLink(String wordsForSearch, String imageType){
         Single<List<PixaImageUrl>> pixaList;
         this.wordsForSearch= wordsForSearch;
         this.imageType = imageType;
+
         pixaUrlsDao = App.getInstance().getPixaUrlsDao();
         if (imageType.equals("all")){
-            pixaList = pixaUrlsDao.getListPixaImageUrs(wordsForSearch).subscribeOn(Schedulers.io()) ;
+            pixaList = pixaUrlsDao.getListPixaImageUrs(wordsForSearch);
         } else {
-            pixaList = pixaUrlsDao.getListPixaImageUrs(wordsForSearch,imageType).subscribeOn(Schedulers.io());
+            pixaList = pixaUrlsDao.getListPixaImageUrs(wordsForSearch, imageType);
         }
 
-        return pixaList.observeOn(Schedulers.io()).subscribeOn(Schedulers.io()).flatMap(new GetFromPixabayIfNeed());
+        return pixaList.subscribeOn(Schedulers.io()).flatMap(new GetFromPixabayIfNeed());
     }
-
 
 
     private class GetFromPixabayIfNeed implements Function<List<PixaImageUrl>, SingleSource<List<PixaImageUrl>>>{
@@ -87,7 +83,6 @@ public class Model extends ViewModel {
                 Log.d(TAG, "pixa size>20, get link from ---> database");
                 return Single.just(pixaImageUrls);
             }
-
         }
     }
 

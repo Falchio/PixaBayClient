@@ -24,7 +24,7 @@ public class PresenterFragmentMain extends MvpPresenter<MainFragmentInterface> {
     public void getPixaImageUrlRX(String wordsForSearch, String imageType){
         wordsForSearch =wordsForSearch.replaceAll(" ", "+");
 
-        Disposable sendToRecyclerView = model.getImageLink2(wordsForSearch, imageType)
+        Disposable sendToRecyclerView = model.getImageLink(wordsForSearch, imageType)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pixaAnswer -> getViewState().loadRecyclerViewRx(pixaAnswer),
                 throwable -> Log.e(TAG, "getPixaImageUrlRX: "));
