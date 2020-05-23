@@ -20,6 +20,7 @@ public class PresenterFragmentMain extends MvpPresenter<MainFragmentInterface> {
     public PresenterFragmentMain() {
         this.model = App.getInstance().getModel();
     }
+    
 
     public void getPixaImageUrlRX(String wordsForSearch, String imageType){
         wordsForSearch =wordsForSearch.replaceAll(" ", "+");
