@@ -8,16 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import ru.falchio.pixabayclient.ui.fragments.FragmentPixaImage;
 import ru.falchio.pixabayclient.R;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 
@@ -55,16 +51,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         Picasso.get().load(pixaImageUrl.getPreviewUrl()).into(holder.imageView);
 
         holder.itemView.setOnClickListener(v -> {
-            FragmentPixaImage fragmentPixaImage = new FragmentPixaImage(pixaImageUrl.getWebFormatUrl());
-            FragmentManager fragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            int frame = ((AppCompatActivity) v.getContext()).findViewById(R.id.main_fragment_container).getId();
-            transaction.replace(
-                    frame,
-                    fragmentPixaImage);
-            transaction.addToBackStack("");
-
-            transaction.commit();
+            pixaImageUrl.getWebFormatUrl();
         });
     }
 

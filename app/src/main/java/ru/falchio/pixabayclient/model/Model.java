@@ -1,6 +1,9 @@
 package ru.falchio.pixabayclient.model;
 
 import android.util.Log;
+
+import androidx.lifecycle.ViewModel;
+
 import java.util.List;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
@@ -17,7 +20,7 @@ import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.json.PixaRequest;
 
 
-public class Model {
+public class Model  extends ViewModel {
     private PixaUrlsDao pixaUrlsDao;
     private final String TAG = this.getClass().getSimpleName();
 
@@ -31,13 +34,13 @@ public class Model {
 
 
     public Model() {
+        Log.e(TAG, "Model: -->Create ");
         initRetrofit();
     }
 
 
 
     private void initRetrofit() {
-
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://pixabay.com/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -51,6 +54,10 @@ public class Model {
         Single<List<PixaImageUrl>> pixaList;
         this.wordsForSearch= wordsForSearch;
         this.imageType = imageType;
+
+
+        Log.e(TAG, "getImageLink: LOAD ===");
+
 
         pixaUrlsDao = App.getInstance().getPixaUrlsDao();
         if (imageType.equals("all")){

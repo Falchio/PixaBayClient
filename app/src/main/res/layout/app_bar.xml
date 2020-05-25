@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary" >
+
+    <TableRow
+        android:id="@+id/row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="10">
+
+        <EditText
+            android:layout_gravity="start"
+            android:id="@+id/search_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:autofillHints=""
+            android:hint="@string/enter_key_word"
+            android:inputType="textAutoComplete"
+            android:padding="4dp" />
+
+        <Spinner
+            android:id="@+id/image_types"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:padding="4dp" />
+
+        <ImageButton
+            style="@style/Widget.AppCompat.Button.Small"
+            android:background="@color/background_color"
+            android:layout_weight="1"
+            android:id="@+id/load_pixa_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/search"
+            android:padding="4dp"
+            android:src="@drawable/ic_search_black_24dp" />
+
+    </TableRow>
+
+</android.widget.Toolbar>

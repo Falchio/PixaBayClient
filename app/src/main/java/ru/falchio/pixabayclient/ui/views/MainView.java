@@ -7,7 +7,7 @@ import moxy.viewstate.strategy.AddToEndStrategy;
 import moxy.viewstate.strategy.StateStrategyType;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 
-public interface MainFragmentInterface extends MvpView {
+public interface MainView extends MvpView {
     @StateStrategyType(value = AddToEndStrategy.class)
     void loadRecyclerViewRx(List<PixaImageUrl> pixaImageUrlList);
 }
