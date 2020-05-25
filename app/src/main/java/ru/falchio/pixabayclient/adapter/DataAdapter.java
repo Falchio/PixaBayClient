@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import ru.falchio.pixabayclient.FragmentPixaImage;
+import ru.falchio.pixabayclient.ui.fragments.FragmentPixaImage;
 import ru.falchio.pixabayclient.R;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 

@@ -1,4 +1,4 @@
-package ru.falchio.pixabayclient;
+package ru.falchio.pixabayclient.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +21,8 @@ import java.util.Objects;
 
 import moxy.MvpAppCompatFragment;
 import moxy.presenter.InjectPresenter;
+import ru.falchio.pixabayclient.ui.views.MainFragmentInterface;
+import ru.falchio.pixabayclient.R;
 import ru.falchio.pixabayclient.adapter.DataAdapter;
 import ru.falchio.pixabayclient.json.PixaImageUrl;
 import ru.falchio.pixabayclient.presenters.PresenterFragmentMain;

@@ -1,4 +1,4 @@
-package ru.falchio.pixabayclient;
+package ru.falchio.pixabayclient.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
+
+import ru.falchio.pixabayclient.R;
 
 
 public class FragmentPixaImage extends Fragment {

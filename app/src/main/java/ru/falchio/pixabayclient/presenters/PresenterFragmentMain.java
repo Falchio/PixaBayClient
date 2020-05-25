@@ -9,7 +9,7 @@ import io.reactivex.disposables.Disposable;
 import moxy.InjectViewState;
 import moxy.MvpPresenter;
 import ru.falchio.pixabayclient.App;
-import ru.falchio.pixabayclient.MainFragmentInterface;
+import ru.falchio.pixabayclient.ui.views.MainFragmentInterface;
 import ru.falchio.pixabayclient.model.Model;
 
 @InjectViewState
@@ -20,7 +20,7 @@ public class PresenterFragmentMain extends MvpPresenter<MainFragmentInterface> {
     public PresenterFragmentMain() {
         this.model = App.getInstance().getModel();
     }
-    
+
 
     public void getPixaImageUrlRX(String wordsForSearch, String imageType){
         wordsForSearch =wordsForSearch.replaceAll(" ", "+");

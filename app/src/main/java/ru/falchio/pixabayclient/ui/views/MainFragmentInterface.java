@@ -1,4 +1,4 @@
-package ru.falchio.pixabayclient;
+package ru.falchio.pixabayclient.ui.views;
 
 import java.util.List;
 
